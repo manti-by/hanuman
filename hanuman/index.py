@@ -1,10 +1,11 @@
+import asyncio
 import sys
 from pathlib import Path
 
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from hanuman.services.store import get_vector_store
+from hanuman.services.store import get_vector_store_context
 from hanuman.services.tui import print_message
 from hanuman.services.utils import clean_text
 from hanuman.settings import settings
@@ -33,6 +34,6 @@ async def index(input_file: str) -> None:
     print_message(f"Created {len(chunks)} chunks", style="result")
 
     print_message("Indexing documents", style="heading")
-    vector_store = await get_vector_store()
-    vector_store.add_documents(chunks)
+    async with get_vector_store_context() as vector_store:
+        await asyncio.to_thread(vector_store.add_documents, chunks)
     print_message("Index is finished successfully", style="result")

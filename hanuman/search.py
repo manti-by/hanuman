@@ -4,7 +4,7 @@ from langchain_core.messages import AIMessage
 from langchain_groq import ChatGroq
 
 from hanuman.services.prompt import get_prompt
-from hanuman.services.store import get_vector_store
+from hanuman.services.store import get_vector_store_context
 from hanuman.services.tui import console, print_message
 from hanuman.settings import settings
 
@@ -40,16 +40,20 @@ async def search() -> None:
         console.print("→ ", style="bold bright_green", end="")
         query = input().strip()
 
-        print_message(f"Searching for: {query}", style="heading")
-        vector_store = await get_vector_store()
-        docs = vector_store.similarity_search(query.lower(), k=settings.top_k)
+        if not query:
+            print_message("Please enter a valid query", style="error")
+            continue
 
-        if not docs:
-            print_message("No results found", style="result")
-        else:
-            context = "\n\n".join(doc.page_content for doc in docs)
-            prompt = await get_prompt(name="search", query=query, context=context)
-            print_llm_response(response=llm.invoke(prompt))
+        print_message(f"Searching for: {query}", style="heading")
+        async with get_vector_store_context() as vector_store:
+            docs = vector_store.similarity_search(query.lower(), k=settings.top_k)
+
+            if not docs:
+                print_message("No results found", style="result")
+            else:
+                context = "\n\n".join(doc.page_content for doc in docs)
+                prompt = await get_prompt(name="search", query=query, context=context)
+                print_llm_response(response=llm.invoke(prompt))
 
         print_message("\nHow would you like to proceed?")
         print_message("  [1] new search - default")

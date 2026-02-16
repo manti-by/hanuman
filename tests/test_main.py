@@ -1,4 +1,5 @@
-from unittest.mock import AsyncMock, MagicMock, patch
+from contextlib import asynccontextmanager
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -40,10 +41,10 @@ class TestCleanText:
 
 class TestMain:
     @pytest.mark.asyncio
-    @patch("hanuman.index.get_vector_store", new_callable=AsyncMock)
+    @patch("hanuman.index.get_vector_store_context")
     @patch("hanuman.index.TextLoader")
     @patch("hanuman.index.Path")
-    async def test_index_mode(self, mock_path_cls, mock_loader_class, mock_get_store):
+    async def test_index_mode(self, mock_path_cls, mock_loader_class, mock_get_store_ctx):
         mock_path_instance = MagicMock()
         mock_path_instance.exists.return_value = True
         mock_path_cls.return_value = mock_path_instance
@@ -55,7 +56,12 @@ class TestMain:
         mock_loader_class.return_value = mock_loader
 
         mock_store = MagicMock()
-        mock_get_store.return_value = mock_store
+
+        @asynccontextmanager
+        async def mock_context():
+            yield mock_store
+
+        mock_get_store_ctx.return_value = mock_context()
 
         await index("/fake/path.txt")
 
@@ -63,9 +69,9 @@ class TestMain:
         mock_store.add_documents.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("hanuman.search.get_vector_store", new_callable=AsyncMock)
+    @patch("hanuman.search.get_vector_store_context")
     @patch("hanuman.search.ChatGroq")
-    async def test_search_mode_no_api_key(self, mock_chat, mock_get_store):
+    async def test_search_mode_no_api_key(self, mock_chat, mock_get_store_ctx):
         with patch("hanuman.search.settings") as mock_settings:
             mock_settings.groq_api_key = None
 
@@ -74,9 +80,9 @@ class TestMain:
             assert exc_info.value.code == 1
 
     @pytest.mark.asyncio
-    @patch("hanuman.search.get_vector_store", new_callable=AsyncMock)
+    @patch("hanuman.search.get_vector_store_context")
     @patch("hanuman.search.ChatGroq")
-    async def test_search_mode(self, mock_chat_class, mock_get_store):
+    async def test_search_mode(self, mock_chat_class, mock_get_store_ctx):
         with patch("hanuman.search.settings") as mock_settings:
             mock_api_key = MagicMock()
             mock_api_key.get_secret_value.return_value = "test_key"
@@ -84,7 +90,12 @@ class TestMain:
 
             mock_store = MagicMock()
             mock_store.similarity_search.return_value = [MagicMock(page_content="relevant context")]
-            mock_get_store.return_value = mock_store
+
+            @asynccontextmanager
+            async def mock_context():
+                yield mock_store
+
+            mock_get_store_ctx.return_value = mock_context()
 
             mock_response = MagicMock()
             mock_response.content = "Test response"
