@@ -27,12 +27,12 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 
 2. Start the services:
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 3. Access the app container:
    ```bash
-   docker-compose exec app bash
+   docker compose exec app bash
    ```
 
 4. Index a text file:

@@ -20,4 +20,4 @@ index:
 	uv run main.py index data/example.txt
 
 search:
-	uv run main.py search "How does temperature affect egg formation?"
+	uv run main.py search

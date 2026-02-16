@@ -7,8 +7,10 @@ Hanuman is a "classic" RAG application.
 ## Project Structure
 
 - `main.py`: Entry point with `index` and `search` commands
+- `hanuman/index.py`: Documents indexation functions
+- `hanuman/search.py`: Search functions
 - `hanuman/settings.py`: Core configuration and environment variables
-- `hanuman/__init__.py`: Package initialization
+- `hanuman/services/`: Miscellaneous services
 - `docker-compose.yml`: Docker services (PostgreSQL + pgvector, app)
 - `Dockerfile`: Python application container
 - `tests/`: Test suite

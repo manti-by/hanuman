@@ -70,7 +70,7 @@ class TestMain:
             mock_settings.groq_api_key = None
 
             with pytest.raises(SystemExit) as exc_info:
-                await search("test query")
+                await search()
             assert exc_info.value.code == 1
 
     @pytest.mark.asyncio
@@ -92,9 +92,8 @@ class TestMain:
             mock_chat.invoke.return_value = mock_response
             mock_chat_class.return_value = mock_chat
 
-            await search("test query")
-
-            await search("test query")
+            with patch("builtins.input", side_effect=["test query", "2"]):
+                await search()
 
             mock_store.similarity_search.assert_called()
             mock_chat_class.assert_called()

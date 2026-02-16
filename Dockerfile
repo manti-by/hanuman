@@ -11,11 +11,10 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 COPY pyproject.toml ./
 
-RUN pip install uv && \
-    uv sync --all-extras
+RUN uv sync --all-extras
 
 COPY . .
 
 ENV PYTHONPATH=/app
 
-CMD ["python", "-m", "main"]
+CMD ["uv", "run", "main.py", "search"]
