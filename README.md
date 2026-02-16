@@ -64,8 +64,8 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 
 4. Run commands:
    ```bash
-   uv run main.py index input/document.txt
-   uv run main.py search "your search query"
+   uv run main.py index input/example.txt
+   uv run main.py search "How does temperature affect egg formation?"
    ```
 
 ## Configuration
@@ -74,15 +74,15 @@ Configuration can be set via environment variables:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `HANUMAN_GROQ_API_KEY` | - | Groq API key |
-| `HANUMAN_DATABASE__HOST` | localhost | Database host |
-| `HANUMAN_DATABASE__PORT` | 5432 | Database port |
-| `HANUMAN_DATABASE__USER` | postgres | Database user |
-| `HANUMAN_DATABASE__PASSWORD` | postgres | Database password |
-| `HANUMAN_DATABASE__DATABASE` | hanuman | Database name |
-| `HANUMAN_CHUNK_SIZE` | 1000 | Text chunk size |
-| `HANUMAN_CHUNK_OVERLAP` | 200 | Chunk overlap |
-| `HANUMAN_TOP_K` | 4 | Number of similar documents to retrieve |
+| `GROQ_API_KEY` | - | Groq API key |
+| `DATABASE__HOST` | localhost | Database host |
+| `DATABASE__PORT` | 5432 | Database port |
+| `DATABASE__USER` | postgres | Database user |
+| `DATABASE__PASSWORD` | postgres | Database password |
+| `DATABASE__DATABASE` | hanuman | Database name |
+| `CHUNK_SIZE` | 1000 | Text chunk size |
+| `CHUNK_OVERLAP` | 200 | Chunk overlap |
+| `TOP_K` | 4 | Number of similar documents to retrieve |
 
 ## Testing
 
