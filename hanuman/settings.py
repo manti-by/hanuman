@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import BaseModel, SecretStr
 from pydantic_settings import BaseSettings
 
@@ -29,6 +31,7 @@ class Settings(BaseSettings):
     embedding: EmbeddingSettings = EmbeddingSettings()
     chat: ChatSettings = ChatSettings()
 
+    base_path: Path = Path(__file__).resolve().parent.parent
     groq_api_key: SecretStr | None = None
     huggingfacehub_api_token: SecretStr | None = None
     chunk_size: int = 1000
