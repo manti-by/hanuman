@@ -1,6 +1,8 @@
 from unittest.mock import MagicMock, patch
 
-from main import clean_text
+from hanuman.index import index
+from hanuman.search import search
+from hanuman.services.utils import clean_text
 
 
 class TestCleanText:
@@ -50,9 +52,7 @@ class TestMain:
         mock_store = MagicMock()
         mock_get_store.return_value = mock_store
 
-        from main import index_mode
-
-        index_mode("/fake/path.txt")
+        index("/fake/path.txt")
 
         mock_loader.load.assert_called_once()
         mock_store.add_documents.assert_called_once()
@@ -63,10 +63,8 @@ class TestMain:
     def test_search_mode_no_api_key(self, mock_chat, mock_get_store, mock_settings):
         mock_settings.groq_api_key = None
 
-        from main import search_mode
-
         with patch("sys.exit") as mock_exit:
-            search_mode("test query")
+            search("test query")
             mock_exit.assert_called_with(1)
 
     @patch("main.settings")
@@ -87,9 +85,9 @@ class TestMain:
         mock_chat.invoke.return_value = mock_response
         mock_chat_class.return_value = mock_chat
 
-        from main import search_mode
+        search("test query")
 
-        search_mode("test query")
+        search("test query")
 
         mock_store.similarity_search.assert_called_once()
         mock_chat_class.assert_called_once()
