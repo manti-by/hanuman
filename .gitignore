@@ -5,5 +5,11 @@ __pycache__/
 *$py.class
 *~
 
-.python-version
+.DS_Store
 .env
+.python-version
+
+.ropeproject/
+.venv/
+.zed/
+data/

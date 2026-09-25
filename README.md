@@ -5,13 +5,13 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 ## Features
 
 - **Index Mode**: Load text files, clean, chunk, embed, and store in PostgreSQL with pgvector
-- **Search Mode**: Retrieve relevant context from vector store and generate answers using Groq LLM
+- **Search Mode**: Retrieve relevant context from vector store and generate answers using OpenRouter LLM
 - **Docker Support**: Complete docker-compose setup with PostgreSQL + pgvector
 
 ## Tech Stack
 
 - **Framework**: LangChain
-- **Chat Model**: Groq (llama-3.1-8b-instant)
+- **Chat Model**: OpenRouter (meta-llama/llama-3.1-8b-instruct)
 - **Vector Store**: PostgreSQL with pgvector extension
 - **Embeddings**: HuggingFace (multilingual-e5-large)
 
@@ -19,10 +19,10 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 
 ### Using Docker
 
-1. Copy the environment file and add your Groq API key:
+1. Copy the environment file and add your OpenRouter API key:
    ```bash
    cp .env.example .env
-   # Edit .env and add your GROQ_API_KEY
+   # Edit .env and add your OPENROUTER_API_KEY
    ```
 
 2. Start the services:
@@ -59,7 +59,7 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 
 3. Set environment variables:
    ```bash
-   export GROQ_API_KEY=your_api_key
+   export OPENROUTER_API_KEY=your_api_key
    ```
 
 4. Run commands:
@@ -74,7 +74,7 @@ Configuration can be set via environment variables:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `GROQ_API_KEY` | - | Groq API key |
+| `OPENROUTER_API_KEY` | - | OpenRouter API key |
 | `DATABASE__HOST` | localhost | Database host |
 | `DATABASE__PORT` | 5432 | Database port |
 | `DATABASE__USER` | postgres | Database user |

@@ -8,14 +8,14 @@ class TestSettings:
         db = DatabaseSettings()
         assert db.host == "localhost"
         assert db.port == 5432
-        assert db.user == "postgres"
+        assert db.user == "hanuman"
         assert db.database == "hanuman"
 
     def test_database_connection_string(self):
         from hanuman.settings import DatabaseSettings
 
         db = DatabaseSettings()
-        expected = "postgresql+psycopg://postgres:postgres@localhost:5432/hanuman"
+        expected = "postgresql+psycopg://hanuman:hanuman@localhost:5432/hanuman"
         assert db.connection_string == expected
 
     def test_custom_database_settings(self):
@@ -35,22 +35,22 @@ class TestSettings:
         from hanuman.settings import ChatSettings
 
         chat = ChatSettings()
-        assert chat.model == "llama-3.1-8b-instant"
+        assert chat.model == "meta-llama/llama-3.1-8b-instruct"
         assert chat.temperature == 0.0
         assert chat.max_tokens == 2048
 
-    @patch.dict("os.environ", {"HANUMAN_GROQ_API_KEY": "test_key"}, clear=False)
+    @patch.dict("os.environ", {"HANUMAN_OPENROUTER_API_KEY": "test_key"}, clear=False)
     def test_settings_from_env(self):
         from pydantic_settings import BaseSettings
 
         class TestSettings(BaseSettings):
-            groq_api_key: str | None = None
+            openrouter_api_key: str | None = None
 
             class Config:
                 env_prefix = "HANUMAN_"
 
         settings = TestSettings()
-        assert settings.groq_api_key == "test_key"
+        assert settings.openrouter_api_key == "test_key"
 
     def test_default_settings(self):
         from hanuman.settings import Settings

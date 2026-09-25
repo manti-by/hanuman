@@ -1,7 +1,7 @@
 import sys
 
 from langchain_core.messages import AIMessage
-from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 
 from hanuman.services.prompt import get_prompt
 from hanuman.services.store import get_vector_store_context
@@ -23,13 +23,14 @@ def print_llm_response(response: AIMessage):
 async def search() -> None:
     print_message("Setting up environment", style="heading")
 
-    if not settings.groq_api_key:
-        print_message("Error: GROQ_API_KEY is not set", style="error")
+    if not settings.openrouter_api_key:
+        print_message("Error: OPENROUTER_API_KEY is not set", style="error")
         sys.exit(1)
 
-    llm = ChatGroq(
+    llm = ChatOpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=settings.openrouter_api_key,
         model=settings.chat.model,
-        groq_api_key=settings.groq_api_key,
         temperature=settings.chat.temperature,
         max_tokens=settings.chat.max_tokens,
     )

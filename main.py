@@ -1,25 +1,20 @@
 import argparse
 import asyncio
-
-from dotenv import load_dotenv
+from argparse import Namespace
 
 from hanuman.index import index
 from hanuman.search import search
 
 
-load_dotenv()
+parser = argparse.ArgumentParser(description="Hanuman - 2-Step RAG Application")
+subparsers = parser.add_subparsers(dest="command", required=True)
+subparsers.add_parser("search", help="Search using RAG")
+
+index_parser = subparsers.add_parser("index", help="Index a text file")
+index_parser.add_argument("input", help="Input text file path")
 
 
-async def main() -> None:
-    parser = argparse.ArgumentParser(description="Hanuman - 2-Step RAG Application")
-    subparsers = parser.add_subparsers(dest="command", required=True)
-    subparsers.add_parser("search", help="Search using RAG")
-
-    index_parser = subparsers.add_parser("index", help="Index a text file")
-    index_parser.add_argument("input", help="Input text file path")
-
-    args = parser.parse_args()
-
+async def main(args: Namespace) -> None:
     if args.command == "index":
         await index(input_file=args.input)
     elif args.command == "search":
@@ -27,4 +22,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    args = parser.parse_args()
+    asyncio.run(main(args=args))

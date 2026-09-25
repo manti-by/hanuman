@@ -7,8 +7,8 @@ from pydantic_settings import BaseSettings
 class DatabaseSettings(BaseModel):
     host: str = "localhost"
     port: int = 5432
-    user: str = "postgres"
-    password: str = "postgres"
+    user: str = "hanuman"
+    password: str = "hanuman"
     database: str = "hanuman"
 
     @property
@@ -21,7 +21,7 @@ class EmbeddingSettings(BaseModel):
 
 
 class ChatSettings(BaseModel):
-    model: str = "llama-3.1-8b-instant"
+    model: str = "meta-llama/llama-3.1-8b-instruct"
     temperature: float = 0.0
     max_tokens: int = 2048
 
@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     chat: ChatSettings = ChatSettings()
 
     base_path: Path = Path(__file__).resolve().parent.parent
-    groq_api_key: SecretStr | None = None
+    openrouter_api_key: SecretStr | None = None
     huggingfacehub_api_token: SecretStr | None = None
     chunk_size: int = 1000
     chunk_overlap: int = 200

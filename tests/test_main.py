@@ -70,10 +70,10 @@ class TestMain:
 
     @pytest.mark.asyncio
     @patch("hanuman.search.get_vector_store_context")
-    @patch("hanuman.search.ChatGroq")
+    @patch("hanuman.search.ChatOpenAI")
     async def test_search_mode_no_api_key(self, mock_chat, mock_get_store_ctx):
         with patch("hanuman.search.settings") as mock_settings:
-            mock_settings.groq_api_key = None
+            mock_settings.openrouter_api_key = None
 
             with pytest.raises(SystemExit) as exc_info:
                 await search()
@@ -81,12 +81,12 @@ class TestMain:
 
     @pytest.mark.asyncio
     @patch("hanuman.search.get_vector_store_context")
-    @patch("hanuman.search.ChatGroq")
+    @patch("hanuman.search.ChatOpenAI")
     async def test_search_mode(self, mock_chat_class, mock_get_store_ctx):
         with patch("hanuman.search.settings") as mock_settings:
             mock_api_key = MagicMock()
             mock_api_key.get_secret_value.return_value = "test_key"
-            mock_settings.groq_api_key = mock_api_key
+            mock_settings.openrouter_api_key = mock_api_key
 
             mock_store = MagicMock()
             mock_store.similarity_search.return_value = [MagicMock(page_content="relevant context")]
