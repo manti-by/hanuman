@@ -47,7 +47,7 @@ async def search() -> None:
 
         print_message(f"Searching for: {query}", style="heading")
         async with get_vector_store_context() as vector_store:
-            docs = vector_store.similarity_search(query.lower(), k=settings.top_k)
+            docs = vector_store.similarity_search(f"{settings.embedding.query_prefix}{query.lower()}", k=settings.top_k)
 
             if not docs:
                 print_message("No results found", style="result")

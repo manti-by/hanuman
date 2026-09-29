@@ -9,6 +9,7 @@ with `/wiki-update`; the plugin only scaffolds the wiki.
 
 _Newest first._
 
+- [2026-09-29-pdf-to-chunks-rag-pipeline](pages/2026-09-29-pdf-to-chunks-rag-pipeline.md) — `prepare` command (PDF → markdown → header-aware chunks) and `index` rewritten to parse them; embeddings moved to multilingual-e5-large. (2026-09-29)
 - [2026-09-25-groq-to-openrouter-migration](pages/2026-09-25-groq-to-openrouter-migration.md) — Groq replaced with OpenRouter via `ChatOpenAI` + `OPENROUTER_API_KEY`.
 
 ## By topic

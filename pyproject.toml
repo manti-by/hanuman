@@ -1,6 +1,6 @@
 [project]
 name = "hanuman"
-version = "0.1.0"
+version = "0.2.0"
 description = "Hanuman is a classic RAG application"
 readme = "README.md"
 requires-python = ">=3.13.6,<3.14.0"
@@ -22,6 +22,7 @@ dependencies = [
     "langchain-huggingface>=1.2.2",
     "sentence-transformers>=6.1.0",
     "rich>=15.0.0",
+    "pymupdf4llm>=1.28.2",
 ]
 
 [dependency-groups]
@@ -56,7 +57,7 @@ norecursedirs = '''
 '''
 
 [tool.bandit]
-exclude_dirs = []
+exclude_dirs = ["tests"]
 skips = ["B101", "B308", "B703"]
 
 [tool.ruff]
@@ -131,7 +132,7 @@ lines-after-imports = 2
 # Ignore "RUF" (Ruff-specific rules) and "I" (isort) in migrations.
 "__init__.py" = ["E402", "F403", "F405"]
 "**/{tests,docs}/*" = ["E402", "F403", "F405", "S", "N802", "N815"]
-"**/*test*.py" = ["E402", "F403", "F405", "S", "N802"]
+"**/*test*.py" = ["E402", "F403", "F405", "S", "N802", "RUF001"]
 "**/{settings}/*" = ["E402", "F403", "F405"]
 "**/migrations/*" = ["RUF", "I"]
 

@@ -3,7 +3,7 @@ check:
 	uv run ty check
 	uv run pre-commit run
 
-pip:
+install:
 	uv sync --all-extras --dev
 
 update:
@@ -14,10 +14,22 @@ update:
 test:
 	uv run pytest tests/
 
-ci: pip check test
+ci: install check test
+
+prepare:
+	uv run main.py prepare
 
 index:
-	uv run main.py index data/example.txt
+	uv run main.py index
 
 search:
 	uv run main.py search
+
+truncate:
+	psql -d hanuman -c "TRUNCATE TABLE langchain_pg_embedding;"
+
+clean:
+	rm -rf data/chunks/*
+	rm -rf data/markdown/*
+
+cleanup: truncate clean

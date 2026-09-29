@@ -27,6 +27,7 @@ services:
       - DATABASE__PASSWORD=postgres
       - DATABASE__DATABASE=hanuman
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - HF_TOKEN=${HF_TOKEN}
     volumes:
       - .:/app
       - ./input:/app/input

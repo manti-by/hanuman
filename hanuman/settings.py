@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from pydantic import BaseModel, SecretStr
-from pydantic_settings import BaseSettings
+from pydantic import AliasChoices, BaseModel, Field, SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DatabaseSettings(BaseModel):
@@ -17,7 +17,9 @@ class DatabaseSettings(BaseModel):
 
 
 class EmbeddingSettings(BaseModel):
-    model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    model: str = "intfloat/multilingual-e5-large"
+    document_prefix: str = "passage: "
+    query_prefix: str = "query: "
 
 
 class ChatSettings(BaseModel):
@@ -33,15 +35,32 @@ class Settings(BaseSettings):
 
     base_path: Path = Path(__file__).resolve().parent.parent
     openrouter_api_key: SecretStr | None = None
-    huggingfacehub_api_token: SecretStr | None = None
+    hf_token: SecretStr | None = Field(
+        default=None,
+        validation_alias=AliasChoices("HF_TOKEN", "HUGGINGFACEHUB_API_TOKEN"),
+    )
     chunk_size: int = 1000
     chunk_overlap: int = 200
     top_k: int = 4
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        env_nested_delimiter = "__"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        env_nested_delimiter="__",
+        extra="ignore",
+    )
+
+    @property
+    def raw_dir(self) -> Path:
+        return self.base_path / "data" / "raw"
+
+    @property
+    def markdown_dir(self) -> Path:
+        return self.base_path / "data" / "markdown"
+
+    @property
+    def chunks_dir(self) -> Path:
+        return self.base_path / "data" / "chunks"
 
 
 settings = Settings()

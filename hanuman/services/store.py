@@ -14,7 +14,8 @@ class VectorStoreManager:
         self.vector_store: PGVector | None = None
 
     async def initialize(self) -> PGVector:
-        self.embeddings = HuggingFaceEmbeddings(model=settings.embedding.model)
+        model_kwargs = {"token": settings.hf_token.get_secret_value()} if settings.hf_token else {}
+        self.embeddings = HuggingFaceEmbeddings(model=settings.embedding.model, model_kwargs=model_kwargs)
         self.vector_store = PGVector(
             embeddings=self.embeddings,
             connection=settings.database.connection_string,

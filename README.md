@@ -4,6 +4,7 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 
 ## Features
 
+- **Prepare Mode**: Convert raw PDFs to markdown and split them into header-aware chunks
 - **Index Mode**: Load text files, clean, chunk, embed, and store in PostgreSQL with pgvector
 - **Search Mode**: Retrieve relevant context from vector store and generate answers using OpenRouter LLM
 - **Docker Support**: Complete docker-compose setup with PostgreSQL + pgvector
@@ -13,7 +14,7 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 - **Framework**: LangChain
 - **Chat Model**: OpenRouter (meta-llama/llama-3.1-8b-instruct)
 - **Vector Store**: PostgreSQL with pgvector extension
-- **Embeddings**: HuggingFace (multilingual-e5-large)
+- **Embeddings**: HuggingFace (intfloat/multilingual-e5-large)
 
 ## Quick Start
 
@@ -35,9 +36,9 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
    docker compose exec app bash
    ```
 
-4. Index a text file:
+4. Index the prepared chunks:
    ```bash
-   python main.py index input/document.txt
+   python main.py index
    ```
 
 5. Search:
@@ -64,9 +65,29 @@ A classic Retrieval-Augmented Generation (RAG) application built with LangChain.
 
 4. Run commands:
    ```bash
-   uv run main.py index input/example.txt
+   uv run main.py prepare
+   uv run main.py index
    uv run main.py search "How does temperature affect egg formation?"
    ```
+
+## Preparing documents
+
+Convert every PDF in `data/raw/` to markdown, then split it into chunks:
+
+```bash
+uv run main.py prepare
+```
+
+- PDFs are converted with `pymupdf4llm` into `data/markdown/<name>.md`
+- Section headings (`4`, `4.1`, `4.4.3.3`, ...) are normalised to matching markdown levels
+- Chunks are written to `data/chunks/<name>/`, each with a header-path front matter
+
+Index them into the vector store (defaults to `data/chunks`, accepts a file or directory):
+
+```bash
+uv run main.py index
+uv run main.py index data/chunks/other-doc
+```
 
 ## Configuration
 
@@ -75,11 +96,13 @@ Configuration can be set via environment variables:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `OPENROUTER_API_KEY` | - | OpenRouter API key |
+| `HF_TOKEN` | - | Hugging Face token (only needed for private/gated models) |
 | `DATABASE__HOST` | localhost | Database host |
 | `DATABASE__PORT` | 5432 | Database port |
 | `DATABASE__USER` | postgres | Database user |
 | `DATABASE__PASSWORD` | postgres | Database password |
 | `DATABASE__DATABASE` | hanuman | Database name |
+| `EMBEDDING__MODEL` | intfloat/multilingual-e5-large | Embedding model |
 | `CHUNK_SIZE` | 1000 | Text chunk size |
 | `CHUNK_OVERLAP` | 200 | Chunk overlap |
 | `TOP_K` | 4 | Number of similar documents to retrieve |
